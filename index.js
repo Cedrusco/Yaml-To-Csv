@@ -1,6 +1,6 @@
-const yaml = require('js-yaml');
-const fs   = require('fs');
-const path = require('path');
+    const yaml = require('js-yaml');
+    const fs   = require('fs');
+    const path = require('path');
 
     //only works with non meta/api files so far
 
@@ -66,6 +66,7 @@ const path = require('path');
             return ""
         }
     }
+
     function extractVersion(filename){
         if(filename.info.version){
             return filename.info.version
@@ -73,6 +74,7 @@ const path = require('path');
             return ""
         }
     }
+
     function extractTitle(filename){
         if(filename.info.title){
             return filename.info.title
@@ -80,13 +82,14 @@ const path = require('path');
             return ""
         }
     }
+
     function extractContactInfo(filename){
         if(filename.info.contact){
             return filename.info.contact.email
         }else{
             return ""
+        }
     }
-}
 
     function extractApis(filename){
         const apis = filename.apis

@@ -8,7 +8,7 @@
     // filter meta files
     let metaFiles = [];
     for(const file of filenameArr){
-        if(file.includes(".api")==false && path.extname(file)==".yml" && file.includes("meta")==true){
+        if(file.includes(".api")==false && path.extname(file)==".yml" && file.includes(".meta")==true){
                 metaFiles.push(file)
         }
     }
@@ -16,7 +16,7 @@
     //filter non meta/api files
     let filteredFiles = []
     for(const file of filenameArr){
-        if(file.includes(".api")==false && path.extname(file)==".yml" && file.includes("meta")==false){
+        if(file.includes(".api")==false && path.extname(file)==".yml" && file.includes(".meta")==false){
             filteredFiles.push(file)
         }
     }
@@ -36,7 +36,7 @@
     //Add state to non-meta file
     for(let file of docArr){
         for(let metafile of docMetaArr){
-            if (metafile.name === file.info.name){
+            if (metafile.name === file.info.name && metafile.version === file.info.version){
                 file.state = metafile.state
             }
         }

@@ -2,23 +2,44 @@
     const fs   = require('fs');
     const path = require('path');
 
-    //only works with non meta/api files so far
-
     //get filenames in a dir
     const filenameArr = fs.readdirSync("C:/Users/SamerSaleh/Desktop/products");
 
-    //filter out unwanted files
+    // filter meta files
+    let metaFiles = [];
+    for(const file of filenameArr){
+        if(file.includes(".api")==false && path.extname(file)==".yml" && file.includes("meta")==true){
+                metaFiles.push(file)
+        }
+    }
+
+    //filter non meta/api files
     let filteredFiles = []
     for(const file of filenameArr){
-        if(file.includes("api")==false && path.extname(file)==".yml" && file.includes("meta")==false){
+        if(file.includes(".api")==false && path.extname(file)==".yml" && file.includes("meta")==false){
             filteredFiles.push(file)
         }
     }
 
-    //load files
+    //load meta files
+    let docMetaArr = []
+    for(const file of metaFiles){
+        docMetaArr.push(yaml.load(fs.readFileSync(`C:/Users/SamerSaleh/Desktop/products/${file}`,'utf8')))
+    }
+
+    //load non meta/api files
     let docArr = []
     for(const file of filteredFiles){
         docArr.push(yaml.load(fs.readFileSync(`C:/Users/SamerSaleh/Desktop/products/${file}`,'utf8')))
+    }
+
+    //Add state to non-meta file
+    for(let file of docArr){
+        for(let metafile of docMetaArr){
+            if (metafile.name === file.info.name){
+                file.state = metafile.state
+            }
+        }
     }
 
     //create JSON versions
@@ -26,9 +47,10 @@
     for(const file of docArr){
         records.push(generateObj(file))
     }
-    console.log(records)
 
-    //convert to CSV
+    //console.log(records)
+
+    //create csv file
     const createCsvWriter = require('csv-writer').createObjectCsvWriter;
     const csvWriter = createCsvWriter({
         path: 'file.csv',
@@ -37,7 +59,8 @@
             {id: 'title', title: 'Title'},
             {id: 'version', title: 'Version'},
             {id: 'contactInfo', title: 'Contact Info'},
-            {id: 'apis', title: 'Apis'}
+            {id: 'apis', title: 'Apis'},
+            {id: 'state', title: 'State'}
         ]
     });
 
@@ -48,15 +71,24 @@
         });
 
     //helper functions
-    function generateObj(filename){
+    function generateObj(filename, metaFile){
         obj = {};
         obj.name = extractName(filename);
         obj.title = extractTitle(filename);
         obj.version = extractVersion(filename);
         obj.contactInfo = extractContactInfo(filename);
         obj.apis = extractApis(filename);
+        obj.state = extractState(filename)
 
         return obj
+    }
+
+    function extractState(filename){
+        if(filename.state){
+            return filename.state
+        }else{
+            return ""
+        }
     }
 
     function extractName(filename){

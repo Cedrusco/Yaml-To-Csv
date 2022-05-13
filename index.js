@@ -48,8 +48,6 @@
         records.push(generateObj(file))
     }
 
-    console.log(records)
-
     //create csv file
     const createCsvWriter = require('csv-writer').createObjectCsvWriter;
     const csvWriter = createCsvWriter({

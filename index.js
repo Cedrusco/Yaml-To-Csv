@@ -2,20 +2,23 @@
     const fs   = require('fs');
     const path = require('path');
 
-    //get filenames in a dir
-    const filenameArr = fs.readdirSync("C:/Users/SamerSaleh/Desktop/products");
+    //Please provide directory here
+    let myDir = "C:/Users/SamerSaleh/Desktop/products"
+
+    //get filenames in the dir
+    const fileNameArr = fs.readdirSync(myDir);
 
     // filter meta files
     let metaFiles = [];
-    for(const file of filenameArr){
+    for(const file of fileNameArr){
         if(file.includes(".api")==false && path.extname(file)==".yml" && file.includes(".meta")==true){
                 metaFiles.push(file)
         }
     }
 
     //filter non meta/api files
-    let filteredFiles = []
-    for(const file of filenameArr){
+    let filteredFiles = [];
+    for(const file of fileNameArr){
         if(file.includes(".api")==false && path.extname(file)==".yml" && file.includes(".meta")==false){
             filteredFiles.push(file)
         }
@@ -24,20 +27,20 @@
     //load meta files
     let docMetaArr = []
     for(const file of metaFiles){
-        docMetaArr.push(yaml.load(fs.readFileSync(`C:/Users/SamerSaleh/Desktop/products/${file}`,'utf8')))
+        docMetaArr.push(yaml.load(fs.readFileSync(`${myDir}/${file}`,'utf8')))
     }
 
     //load non meta/api files
     let docArr = []
     for(const file of filteredFiles){
-        docArr.push(yaml.load(fs.readFileSync(`C:/Users/SamerSaleh/Desktop/products/${file}`,'utf8')))
+        docArr.push(yaml.load(fs.readFileSync(`${myDir}/${file}`,'utf8')))
     }
 
-    //Add state to non-meta file
+    //Add state from meta-file to non-meta file
     for(let file of docArr){
-        for(let metafile of docMetaArr){
-            if (metafile.name === file.info.name && metafile.version === file.info.version){
-                file.state = metafile.state
+        for(let metaFile of docMetaArr){
+            if (metaFile.name === file.info.name && metaFile.version === file.info.version){
+                file.state = metaFile.state
             }
         }
     }
@@ -47,8 +50,6 @@
     for(const file of docArr){
         records.push(generateObj(file))
     }
-
-    //console.log(records)
 
     //create csv file
     const createCsvWriter = require('csv-writer').createObjectCsvWriter;
@@ -67,72 +68,72 @@
     //write to csv file
     csvWriter.writeRecords(records)
         .then(() => {
-            console.log('...Done');
+            console.log('...Done, Please Check file.csv for Results');
         });
 
     //helper functions
-    function generateObj(filename, metaFile){
+    function generateObj(fileName){
         obj = {};
-        obj.name = extractName(filename);
-        obj.title = extractTitle(filename);
-        obj.version = extractVersion(filename);
-        obj.contactInfo = extractContactInfo(filename);
-        obj.apis = extractApis(filename);
-        obj.state = extractState(filename)
+        obj.name = extractName(fileName);
+        obj.title = extractTitle(fileName);
+        obj.version = extractVersion(fileName);
+        obj.contactInfo = extractContactInfo(fileName);
+        obj.apis = extractApis(fileName);
+        obj.state = extractState(fileName)
 
         return obj
     }
 
-    function extractState(filename){
-        if(filename.state){
-            return filename.state
+    function extractState(fileName){
+        if(fileName.state){
+            return fileName.state
         }else{
             return ""
         }
     }
 
-    function extractName(filename){
-        if(filename.info.name){
-            return filename.info.name
+    function extractName(fileName){
+        if(fileName.info.name){
+            return fileName.info.name
         }else{
             return ""
         }
     }
 
-    function extractVersion(filename){
-        if(filename.info.version){
-            return filename.info.version
+    function extractVersion(fileName){
+        if(fileName.info.version){
+            return fileName.info.version
         }else{
             return ""
         }
     }
 
-    function extractTitle(filename){
-        if(filename.info.title){
-            return filename.info.title
+    function extractTitle(fileName){
+        if(fileName.info.title){
+            return fileName.info.title
         }else{
             return ""
         }
     }
 
-    function extractContactInfo(filename){
-        if(filename.info.contact){
-            return filename.info.contact.email
+    function extractContactInfo(fileName){
+        if(fileName.info.contact){
+            return fileName.info.contact.email
         }else{
             return ""
         }
     }
 
-    function extractApis(filename){
-        const apis = filename.apis
+    function extractApis(fileName){
+        const apis = fileName.apis
         result= []
         for(const api in apis){
-            result.push(removeExtension(filename.apis[api]['$ref']));
+            result.push(removeExtension(fileName.apis[api]['$ref']));
         }
         return result.join(', ')
     }
 
-    function removeExtension(filename) {
-        return path.parse(filename.substring(0, filename.lastIndexOf('.'))).name || filename;
+    function removeExtension(fileName) {
+        return path.parse(fileName.substring(0, fileName.lastIndexOf('.'))).name || fileName;
     }
 

@@ -1,6 +1,6 @@
 Name,Title,Version,Contact Info,Apis,State
-calculatorproduct,CalculatorProduct,1.0.0,,"calculatorapi-1.0.0, helloworld-1.0.0",published
-calculatorproduct,CalculatorProduct,1.1.0,,"calculatorapi-1.0.0, helloworld-1.0.0",test
-calculatorproduct,CalculatorProduct,1.0.0,,"calculatorapi-1.0.0, helloworld-1.0.0",published
-countrylistproduct,CountryListProduct,1.0.0,mahima.annagiri@cedrusco.com,"countryapi-1.0.0, helloworld-1.0.0",published
-helloworldproduct,HelloWorldProduct,1.0.0,helloworld@cedrusco.com,helloworld-1.0.0,published
+calculatorproduct,CalculatorProduct,1.0.0,,"calculatorapi-1.0.0, helloworld-1.0.0",hello
+calculatorproduct,CalculatorProduct,1.1.0,,"calculatorapi-1.0.0, helloworld-1.0.0",ontheway123
+calculatorproduct,CalculatorProduct,1.0.0,,"calculatorapi-1.0.0, helloworld-1.0.0",hello
+countrylistproduct,CountryListProduct,1.0.0,mahima.annagiri@cedrusco.com,"countryapi-1.0.0, helloworld-1.0.0",ontheway
+helloworldproduct,HelloWorldProduct,1.0.0,helloworld@cedrusco.com,helloworld-1.0.0,pubsub

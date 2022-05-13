@@ -8,19 +8,16 @@
     //get filenames in the dir
     const fileNameArr = fs.readdirSync(myDir);
 
-    // filter meta files
+    //filter files
     let metaFiles = [];
-    for(const file of fileNameArr){
-        if(file.includes(".api")==false && path.extname(file)==".yml" && file.includes(".meta")==true){
-                metaFiles.push(file)
-        }
-    }
-
-    //filter non meta/api files
     let filteredFiles = [];
     for(const file of fileNameArr){
-        if(file.includes(".api")==false && path.extname(file)==".yml" && file.includes(".meta")==false){
-            filteredFiles.push(file)
+        if(file.includes(".api")==false && path.extname(file)==".yml"){
+            if(file.includes(".meta")){
+                metaFiles.push(file)
+            } else {
+                filteredFiles.push(file)
+            }
         }
     }
 
@@ -50,6 +47,8 @@
     for(const file of docArr){
         records.push(generateObj(file))
     }
+
+    console.log(records)
 
     //create csv file
     const createCsvWriter = require('csv-writer').createObjectCsvWriter;
@@ -136,4 +135,3 @@
     function removeExtension(fileName) {
         return path.parse(fileName.substring(0, fileName.lastIndexOf('.'))).name || fileName;
     }
-
